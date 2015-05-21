@@ -1,2 +1,0 @@
-testna datoteka
-sdhfkjas
