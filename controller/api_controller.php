@@ -23,7 +23,8 @@ class ApiController
 				
 				break;
 			case 'Register':
-				
+				return $this->onRegister($data);
+
 				break;
 			default:
 				throw new Exception("Nepostojeca metoda!");
@@ -45,19 +46,34 @@ class ApiController
 	{
 		include 'controller/user_controller.php';
 		include 'model/user.php';
-		$user = new User();
-		$user->username = $data->username;
-		$user->password = $data->password;
-		
+		$user = new User($data,array('username','password'));
+			
 		$uc = new UserController();
 		$result = $uc->login($user);
 		
 		if ($result) {
-			$r = $this->generateResult(TRUE, $result);
+			$r = $this->generateResult(TRUE, $result, 'Uspjesno ste logirani');
 		} else {
 			$r = $this->generateResult(FALSE, NULL, 'Invalid login data');
 		}
 		
 		return $r;
 	}
-}
+	
+	public function onRegister($data) {
+		
+		include 'controller/user_controller.php';
+		include 'model/user.php';
+		$user = new User($data,array('username', 'password', 'firstname', 'lastname', 'email'));		
+		$uc = new UserController();
+		$result = $uc->register($user);
+		
+		if ($result) {
+			$r = $this->generateResult(TRUE, $result, 'Uspjesna registracija');
+		} else {
+			$r = $this->generateResult(FALSE, NULL, 'Invalid register data');
+		}
+		return $r;
+		
+	}
+} 

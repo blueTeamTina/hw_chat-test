@@ -8,8 +8,8 @@ class UserController
 		
 	}
 	
-	public function login(User $user)
-	{
+	public function login(User $user) {
+		
 		$db = Baza::$db;
 		$username = $db->real_escape_string($user->username);
 		$password = md5($db->real_escape_string($user->password));
@@ -24,5 +24,22 @@ class UserController
 		$u = $r->fetch_object();
 		
 		return $u->id;
+	}
+	
+	public function register(User $user) {
+		
+		$db = Baza::$db;
+		$username = $db->real_escape_string($user->username);
+		$password = md5($db->real_escape_string($user->password));
+		$firstname = $db->real_escape_string($user->firstname);
+		$lastname = $db->real_escape_string($user->lastname);
+		$email = $db->real_escape_string($user->email);
+		
+		$sql = "INSERT INTO user (username, password, name, surname, email) "
+			   ."VALUES ('$username', '$password', '$firstname', '$lastname', '$email')"; 
+	
+		$r = $db->query($sql);
+		return $r;
+		
 	}
 }
