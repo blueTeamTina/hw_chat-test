@@ -19,6 +19,11 @@ $json_data_string = '{"username":"'.$_POST['username'].'", "password":"'.$_POST[
 				    .'"firstname":"'.$_POST['firstname'].'", "lastname":"'.$_POST['lastname'].'",'
 				    .'"email":"'.$_POST['email'].'"}';				   
 
+<<<<<<< HEAD
+=======
+$json_data_string='{"username":"'.$_POST['username'].'", "password":"'.$_POST['password'].'"}';
+
+>>>>>>> drazen
 $data = isset($json_data_string) ? $json_data_string : NULL;
 $action = isset($_POST['action']) ? $_POST['action'] : NULL;
 $token = isset($_COOKIE['token']) ? $_COOKIE['token'] : NULL;
