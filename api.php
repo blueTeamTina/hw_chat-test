@@ -7,7 +7,7 @@ include 'model/result.php';
 // svi ulazni podaci su u POST/REQUEST
 // action
 // data
-// COOKIE(token) identifikacija
+// COOKIE(token) identifikacija balbalbalbla
 
 $json_data_string='{"username":"'.$_POST['username'].'", "password":"'.$_POST['password'].'"}';
 
