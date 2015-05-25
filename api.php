@@ -9,7 +9,6 @@ include 'valid.php';
 // svi ulazni podaci su u POST/REQUEST
 // action
 // data
-<<<<<<< HEAD
 // COOKIE(token) identifikacija
 	
 $args = $_REQUEST;
@@ -19,15 +18,9 @@ $error = $v->isValid($args);
 $json_data_string = '{"username":"'.$_POST['username'].'", "password":"'.$_POST['password'].'",'
 				    .'"firstname":"'.$_POST['firstname'].'", "lastname":"'.$_POST['lastname'].'",'
 				    .'"email":"'.$_POST['email'].'"}';				   
-=======
-// COOKIE(token) identifikacija balbalbalbla
->>>>>>> drazen
 
-<<<<<<< HEAD
-=======
 $json_data_string='{"username":"'.$_POST['username'].'", "password":"'.$_POST['password'].'"}';
 
->>>>>>> drazen
 $data = isset($json_data_string) ? $json_data_string : NULL;
 $action = isset($_POST['action']) ? $_POST['action'] : NULL;
 $token = isset($_COOKIE['token']) ? $_COOKIE['token'] : NULL;
