@@ -15,7 +15,7 @@ class UserController
 		$password = md5($db->real_escape_string($user->password));
 		
 		$sql = "SELECT * FROM user "
-			." WHERE username = '$username' AND password = '$password' ";
+			   ." WHERE username = '$username' AND password = '$password' ";
 		$r = $db->query($sql);
 		
 		if ($r->num_rows === 0) {
