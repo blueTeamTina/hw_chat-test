@@ -14,7 +14,7 @@ $json_data_string='{"username":"'.$_POST['username'].'", "password":"'.$_POST['p
 $data = isset($json_data_string) ? $json_data_string : NULL;
 $action = isset($_POST['action']) ? $_POST['action'] : NULL;
 $token = isset($_COOKIE['token']) ? $_COOKIE['token'] : NULL;
-
+var_dump($json_data_string);
 
 if (empty($action)) {
 	die("Action is not specified");
