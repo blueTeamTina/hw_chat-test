@@ -11,8 +11,8 @@ include 'model/result.php';
 
 $json_data_string='{"username":"'.$_POST['username'].'", "password":"'.$_POST['password'].'"}';
 
-$action = isset($_POST['action']) ? $_POST['action'] : NULL;
 $data = isset($json_data_string) ? $json_data_string : NULL;
+$action = isset($_POST['action']) ? $_POST['action'] : NULL;
 $token = isset($_COOKIE['token']) ? $_COOKIE['token'] : NULL;
 
 
