@@ -17,10 +17,10 @@ class ApiController
 	{
 		switch($action) {
 			case 'Login':
-				return $this->onLogin($data);
+				return $this->onLogin($data, $auth);
 				break;
 			case 'Logout':
-				
+			    $this->onLogout();
 				break;
 			case 'Register':
 				return $this->onRegister($data);
@@ -42,12 +42,22 @@ class ApiController
 		return $r;
 	}
 	
-	private function onLogin($data)
+	private function onLogin($data, $token)
 	{
 		include 'controller/user_controller.php';
 		include 'model/user.php';
+		include 'token.php';
 		$user = new User($data,array('username','password'));
+		
 			
+		$tok = new Token();
+        $result = $tok->validate($token);
+                
+			if ($result === FALSE) {
+                exit ("Korisnik je logiran <br> Idi na <a href='http://www.w3schools.com'>Chat</a> <br> ili se odjavite:
+					  <br><form name='form1' method='POST' action='api.php'> <input type='submit' name='action' value='Logout'>");
+            }
+		
 		$uc = new UserController();
 		$result = $uc->login($user);
 		
@@ -76,4 +86,13 @@ class ApiController
 		return $r;
 		
 	}
+	 
+	private function onLogout($token) {
+        include 'token.php'; 
+        $tok = new Token();
+        $validate = $tok->delete();
+        header ("Location: login.html");
+        return $validate;
+    } 
+	
 } 

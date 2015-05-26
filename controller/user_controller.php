@@ -22,7 +22,8 @@ class UserController
 			return false;
 		}
 		$u = $r->fetch_object();
-		
+		$token = new Token();
+        $token->create($u->id);
 		return $u->id;
 	}
 	
