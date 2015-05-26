@@ -47,6 +47,7 @@ class ApiController
 		include 'controller/user_controller.php';
 		include 'model/user.php';
 		include 'token.php';
+		include 'log.php';
 		$user = new User($data,array('username','password'));
 		
 			
@@ -87,9 +88,17 @@ class ApiController
 		
 	}
 	 
-	private function onLogout($token) {
+	private function onLogout() {
         include 'token.php'; 
+		include 'log.php';
+		
         $tok = new Token();
+               
+       
+        
+        
+        
+        
         $validate = $tok->delete();
         header ("Location: login.html");
         return $validate;

@@ -23,7 +23,9 @@ class UserController
 		}
 		$u = $r->fetch_object();
 		$token = new Token();
+		$log = new Log();
         $token->create($u->id);
+        $log->createLogin($u->id);
 		return $u->id;
 	}
 	

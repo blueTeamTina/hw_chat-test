@@ -36,6 +36,13 @@ class Token
 	public function delete($token)
 	{
 		$db = Baza::$db;
+		
+        $sqlLog = "SELECT userID FROM token WHERE value = '".$_COOKIE['token']."'";
+        $r=$db->query($sqlLog);
+        $u = $r->fetch_object();
+        $log = new Log();
+        $log->createLogout($u->userID);
+		
 		if(isset($_COOKIE['token'])) {
 			$sql = "UPDATE token SET validTo = NOW() WHERE value = '".$_COOKIE['token']."'";	
 			$db->query($sql);
