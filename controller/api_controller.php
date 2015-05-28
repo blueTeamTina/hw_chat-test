@@ -7,12 +7,7 @@ class ApiController
 		include 'db.php';
 		
 	}
-	
-	/**
-	 * @param String $action
-	 * @param Object $data
-	 * @param String $auth
-	 */ 
+
 	public function handle($action, Data $data, $auth)
 	{
 		switch($action) {
@@ -46,8 +41,8 @@ class ApiController
 	{
 		include 'controller/user_controller.php';
 		include 'model/user.php';
-		include 'token.php';
-		include 'log.php';
+		include 'model/token.php';
+		include 'model/log.php';
 		$user = new User($data,array('username','password'));
 		
 			
@@ -89,16 +84,11 @@ class ApiController
 	}
 	 
 	private function onLogout() {
-        include 'token.php'; 
-		include 'log.php';
+		
+        include 'model/token.php'; 
+		include 'model/log.php';
 		
         $tok = new Token();
-               
-       
-        
-        
-        
-        
         $validate = $tok->delete();
         header ("Location: login.html");
         return $validate;

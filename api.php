@@ -4,7 +4,7 @@
 include 'controller/api_controller.php';
 include 'model/result.php';
 include 'model/data.php';
-include 'valid.php';
+include 'helper/valid.php';
 
 // svi ulazni podaci su u POST/REQUEST
 // action
@@ -39,7 +39,6 @@ if (!empty($data)) {
 	foreach($obj as $key => $val) {
 		$d->$key = $val;
 	}
-	
 }
 
 $api = new ApiController();
