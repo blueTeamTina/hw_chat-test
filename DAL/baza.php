@@ -6,6 +6,7 @@ class Baza extends mysqli
 	
 	public static $db;
 	
+	
 	public function __construct($host, $username, $password, $db)
 	{
 		parent::__construct($host, $username, $password, $db);

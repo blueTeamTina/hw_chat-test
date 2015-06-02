@@ -1,16 +1,107 @@
 <?php
+$params = $_REQUEST;
+$action = $params['action'];
+$controller = $params['controller'];
+//check if the controller exists. if it doesn't - stop
+if( file_exists("controller/{$controller}.php") ) {
+	include_once "controller/{$controller}.php";
+} else {
+    $result['success'] = false;
+	die("Controller doesn't exit.");
+}
+$controller = new $controller($params);
+//check if method from controller exists, if it doesn't - stop
+if( method_exists($controller, $action) === false ) {
+    $result['success'] = false;
+	die("Action doesn't exit.");
+}
+$result["data"] = $controller->$action();
+$result["success"] = true;
+print_r($result);
 
 
-include 'controller/api_controller.php';
-include 'model/result.php';
-include 'model/data.php';
-include 'helper/valid.php';
 
-// svi ulazni podaci su u POST/REQUEST
-// action
-// data
-// COOKIE(token) identifikacija
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+ * $params = $_REQUEST;
+$token = isset($_COOKIE['token']) ? $_COOKIE['token'] : NULL;
+$action = $params['action'];
+
+//check if the controller exists. if it doesn't - stop
+
+if (empty($action) || empty($params)) {
+	$result['success'] = false;
+	die("Action or data is not specified");
+}	else {
+		switch($action) {
+			case 'Login':	
+				include_once 'controller/user_controller.php';
+				$controller = new UserController($params);
+				$result["data"] = $controller->login($token);
+				$result["success"] = true;
+				break;
+			case 'Logout':
+				include_once 'controller/user_controller.php';
+				$controller = new UserController($params);
+			    $result["data"] = $controller->logout();
+			    $result["success"] = true;
+				break;
+			case 'Register':
+				include_once 'controller/user_controller.php';
+				$result["data"] = $this->onRegister($data);
+				$result["success"] = true;
+				break;
+			default:
+				die("Nepostojeca metoda!");
+				break;
+		}
 	
+}
+
+print_r($result);
+
+
+
+/*	
+ * 
+ * 
+ * $controller = new $controller($params);
+//check if method from controller exists, if it doesn't - stop
+if( method_exists($controller, $action) === false ) {
+    $result['success'] = false;
+	die("Action doesn't exit.");
+}
+ * 
+ * 
+ * 
+ * 
+ * 
 $args = $_REQUEST;
 $v = new Valid();
 $error = $v->isValid($args);
@@ -51,14 +142,11 @@ if ($error==false){
 		$r->ok = FALSE;
 		$r->error = $e->getMessage();
 	}
+} else {
+	echo 'Ispravite pogreske';
 }
-
-else {
-	echo '<br>Ispravite pogreske';
-}
-	
-echo "<br>";
 
 if($r->error!=NULL) {
-echo json_encode($r->error);
+echo $r->error;
 }
+*/

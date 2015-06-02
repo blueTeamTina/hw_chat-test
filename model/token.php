@@ -6,18 +6,14 @@ class Token
 	public function validate($token)
 	{
 		$db = Baza::$db;
-
-		$validToken = FALSE;
-		
+		$validToken = FALSE;		
 		if (!empty($token)) {
 		$token = $db->real_escape_string($token);
 		$sql = "SELECT id FROM token WHERE value = '$token' "
 		. " AND validTo > NOW() ";
 		$r = $db->query($sql);	
 		$validToken = $r -> num_rows > 0;	
-		}
-
-	
+		}	
 		if ($validToken) {
 			return FALSE;
 		}

@@ -4,7 +4,7 @@ class ApiController
 {
 	public function __construct()
 	{
-		include 'db.php';
+		include 'DAL/db.php';
 		
 	}
 
@@ -19,7 +19,6 @@ class ApiController
 				break;
 			case 'Register':
 				return $this->onRegister($data);
-
 				break;
 			default:
 				throw new Exception("Nepostojeca metoda!");
@@ -43,15 +42,15 @@ class ApiController
 		include 'model/user.php';
 		include 'model/token.php';
 		include 'model/log.php';
-		$user = new User($data,array('username','password'));
 		
-			
+		$user = new User($data,array('username','password'));				
 		$tok = new Token();
         $result = $tok->validate($token);
                 
 			if ($result === FALSE) {
                 exit ("Korisnik je logiran <br> Idi na <a href='http://www.w3schools.com'>Chat</a> <br> ili se odjavite:
-					  <br><form name='form1' method='POST' action='api.php'> <input type='submit' name='action' value='Logout'>");
+					  <br><form name='form1' method='POST' action='api.php'> 
+					  <input type='hidden' name='controller' value='user_controller'> <input type='submit' name='action' value='Logout'>");
             }
 		
 		$uc = new UserController();
@@ -90,8 +89,7 @@ class ApiController
 		
         $tok = new Token();
         $validate = $tok->delete();
-        header ("Location: login.html");
+        header ("Location: login.php");
         return $validate;
-    } 
-	
+    } 	
 } 

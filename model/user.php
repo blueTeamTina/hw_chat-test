@@ -12,7 +12,7 @@ class User
 	{
 		
 		for ($i = 0; $i < count($required); $i++) { 
-			$this->$required[$i] = $data->$required[$i];
+			$this->$required[$i] = $data["$required[$i]"];
 		}
 	}
 
