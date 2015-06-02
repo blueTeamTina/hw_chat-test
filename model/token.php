@@ -6,17 +6,23 @@ class Token
 	public function validate($token)
 	{
 		$db = Baza::$db;
-		$validToken = FALSE;		
-		if (!empty($token)) {
-		$token = $db->real_escape_string($token);
-		$sql = "SELECT id FROM token WHERE value = '$token' "
-		. " AND validTo > NOW() ";
-		$r = $db->query($sql);	
-		$validToken = $r -> num_rows > 0;	
-		}	
-		if ($validToken) {
-			return FALSE;
-		}
+		$userID = FALSE;		
+			if (!empty($token)) {
+			$token = $db->real_escape_string($token);
+			$sql = "SELECT userID FROM token WHERE value = '$token' "
+			. " AND validTo > NOW() ";
+			$result = $db->query($sql);	
+			$data = $result->fetch_object();
+			} else {
+				return false;
+			}
+			
+			
+			if ($data) {
+				return $data->userID;
+			} else {
+				return FALSE;
+			}
 	}
 	
 	public function create($idUser)
@@ -29,9 +35,13 @@ class Token
 		$_COOKIE['token'] = $token;
 	}
 	
-	public function delete($token)
+	public function delete()
 	{
 		$db = Baza::$db;
+				
+		if (empty($_COOKIE['token'])) {				
+			return false;					
+		}
 		
         $sqlLog = "SELECT userID FROM token WHERE value = '".$_COOKIE['token']."'";
         $r=$db->query($sqlLog);
@@ -45,7 +55,7 @@ class Token
 			setcookie("token", '', -1);
 			$_COOKIE['token'] = null;			
 			return TRUE;
-		}
+		} 
 	}
 	
 	private function generate()

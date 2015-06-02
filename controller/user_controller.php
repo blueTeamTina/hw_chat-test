@@ -16,22 +16,23 @@ class user_controller
 		include 'model/user.php';
 		include 'model/token.php';
 		include 'model/log.php';	
-		$token = isset($_COOKIE['token']) ? $_COOKIE['token'] : NULL;
 
-		$db = Baza::$db;
+		$token = isset($_COOKIE['token']) ? $_COOKIE['token'] : NULL;
 		
-		$user = new User($this->data,array('username', 'password'));
+		$db = Baza::$db;		
+		
+		$user = new User($this->data,array('username', 'password'));			
+		
 		
 		$checkToken = new Token();
-		
 		$tokenValidateResult = $checkToken->validate($token);
 		
-		if ($tokenValidateResult === FALSE) {
+		if ($tokenValidateResult) {
                 return ("Korisnik je logiran <br> Idi na <a href='http://www.w3schools.com'>Chat</a> <br> ili se odjavite:
 					    <br><form name='form1' method='POST' action='api.php'> 
 					    <input type='hidden' name='controller' value='user_controller'> <input type='submit' name='action' value='Logout'>");
-        }
-            
+        }      
+                 
 		$username = $db->real_escape_string($user->username);
 		$password = md5($db->real_escape_string($user->password));
 		
@@ -41,7 +42,7 @@ class user_controller
 		$result = $db->query($sql);
 		
 		if ($result->num_rows === 0) {
-			return "Nepostojeci korisnik";
+			return "Pogresan username ili password";
 		}
 		
 		$userID = $result->fetch_object();
@@ -52,12 +53,13 @@ class user_controller
         $token->create($userID->id);
         $log->createLogin($userID->id);
         
-		return $userID->id;
+		return "Korisnik $userID->id se uspjesno logirao";
 	}
 	
 	public function register() {
 		
 		include 'model/user.php';
+		include 'helper/validate.php';
 
 		$db = Baza::$db;
 		$user = new User($this->data,array('username', 'password', 'firstname', 'lastname', 'email'));		
@@ -65,6 +67,13 @@ class user_controller
 		{
 				return "Username or e-mail already registered.";
 		} 
+		
+		$valid = new Valid();
+        $validResult = $valid->isValid($this->data);
+		if (!empty($validResult))
+		{
+			return $validResult;
+		}
 		$username = $db->real_escape_string($user->username);
 		$password = md5($db->real_escape_string($user->password));
 		$firstname = $db->real_escape_string($user->firstname);
@@ -77,7 +86,7 @@ class user_controller
 		$result = $db->query($sql);
 		
 		if ($result) {
-			return true;
+			return "Uspješno registriran korisnik '$username'.";
 		} else {
 			return false;
 		}
@@ -90,9 +99,12 @@ class user_controller
 		include 'model/log.php';
 		
         $tok = new Token();
-        $validate = $tok->delete();
-        header ("Location: login.php");
-        return $validate;
+        $result = $tok->delete();
+			if($result) {
+				return "Korisnik $result se uspjesno odjavio";
+			} else {
+				return "Niste prijavljeni";
+			}
     } 	
     
     public function check() {
@@ -105,9 +117,70 @@ class user_controller
 		}
 	}
 	
-	//public function editProfile() {}
+	public function editProfile() {
+	include 'model/token.php';
+	include 'model/user.php';
+	include 'helper/validate.php';
+
+	$token = isset($_COOKIE['token']) ? $_COOKIE['token'] : NULL;	
 	
+		if (empty($token)) {				
+			return "Korisnik nije logiran";					
+		}
 	
+	$checkToken = new Token();
+	$userID = $checkToken->validate($token);
+	
+	$user = new User($this->data,array('password', 'firstname', 'lastname', 'email'));				
+	$changed = array();
+	$valid = new Valid();
+
 		
+		if(strlen($user->password) > 0)	{		
+			$validResult = $valid->isValid(array("password"=>"$user->password"));
+			if (!empty($validResult))
+			{
+			return $validResult;
+			}				
+			$password = md5($user->password);
+			$sql = "UPDATE user set password = '$password' WHERE id = '$userID'"; 
+			$result = Baza::$db->query($sql);
+			array_push($changed, "Password changed.");
+		} 
+		if(strlen($user->firstname) > 0) {
+			$validResult = $valid->isValid(array("firstname"=>"$user->firstname"));
+			if (!empty($validResult))
+			{
+			return $validResult;
+			}	
+			$firstname = $user->firstname;
+			$sql = "UPDATE user set name = '$firstname' WHERE id = '$userID'"; 
+			$result = Baza::$db->query($sql);
+			array_push($changed, "Firstname changed.");
+		} 
+		if(strlen($user->lastname) > 0)	{
+			$validResult = $valid->isValid(array("lastname"=>"$user->lastname"));
+			if (!empty($validResult))
+			{
+			return $validResult;
+			}	
+			$lastname = $user->lastname;
+			$sql = "UPDATE user set surname = '$lastname' WHERE id = '$userID'"; 
+			$result = Baza::$db->query($sql);
+			array_push($changed, "Lastname changed.");
+		} 
+		if(strlen($user->email) > 0) {
+			$validResult = $valid->isValid(array("email"=>"$user->email"));
+			if (!empty($validResult))
+			{
+			return $validResult;
+			}	
+			$email = $user->email;
+			$sql = "UPDATE user set email = '$email' WHERE id = '$userID'"; 
+			$result = Baza::$db->query($sql);
+			array_push($changed, "Email changed.");
+		} 
+		return $changed;
+	}
 	
 }

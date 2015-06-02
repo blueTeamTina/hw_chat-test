@@ -7,7 +7,7 @@ class Log
 	{
 		$db = Baza::$db;
 		$sql = "INSERT INTO log (userID, dt, type) "
-			   ."VALUES ($idUser, NOW(), 'Login')"; 			   
+			   ."VALUES ($idUser, NOW(), 'Login')";
 		$r = $db->query($sql);
 	}
 	
